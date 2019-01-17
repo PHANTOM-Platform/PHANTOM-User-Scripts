@@ -35,9 +35,6 @@ def main():
 	
 	config_decoder["token"]=["#TOKEN#", auth_token]
 
-
-	print(config_decoder)
-
 	#upload source code
 
 	if settings.src_path != '':
@@ -136,7 +133,6 @@ def relativePath(root, repo_folder,fullPath):
 def generatetConfigFile(dir_path,configFileName,listToConfigure):
 	dir_path = enforce_trailing_slash(dir_path)
 	try:
-		print(dir_path + "configuration-template.txt")
 		f_template = open(dir_path + "/configuration-template.txt", "r")
 		template = f_template.read()
 		print("Configuration Template Loaded")

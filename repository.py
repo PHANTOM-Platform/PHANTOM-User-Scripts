@@ -13,7 +13,6 @@ def authenticate(user,pwd):
 		rv = requests.get(repo_token_url, headers=headers)
 		if rv.status_code == 200:
 			print("Authentication sucessfull")
-			print("token: {}".format(rv.text) )
 			return rv.text
 		elif rv.status_code == 401:
 			print("Credentials invalid!!!")

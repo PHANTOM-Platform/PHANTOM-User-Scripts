@@ -1,7 +1,7 @@
 
 
 # Set the Repository IP address and port
-repository_ip = "localhost"
+repository_ip = "127.0.0.1"
 repository_port = 8000
 
 
