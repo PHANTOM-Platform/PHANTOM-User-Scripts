@@ -30,25 +30,34 @@ def register(user,pwd):
 	Register a new user in the repository
 	"""
 	repo_token_url = "http://{}:{}/signup?email={}&pw={}".format(settings.repository_ip, settings.repository_port, user, pwd)
-
 	try:
-		headers = {'content-type': 'text/plain'}
+		headers = {'content-type': 'application/json'}
 		rv = requests.post(repo_token_url, headers=headers)
-		if rv.status_code != 200:
+		serverFlush(settings.repository_ip, settings.repository_port)
+		if rv.status_code != 400:
 			print("Could not log in to repository. Status code: {}\n{}".format(rv.status_code, rv.text))
 			return 1
 		else:
 			print("User: {} was successfully registred!".format(user))
-		return 0
+			return 0
 	except requests.exceptions.ConnectionError as e:
 		print("ERRROR: Connection refused when connecting to the repository during registry.")
 		print(str(e))
 		sys.exit(1)
 
-
+def isTokenValid(token):
+	url = "http://{}:{}/verifytoken".format(settings.repository_ip, settings.repository_port)
+	headers = {'Authorization': "OAuth {}".format(token)}
+	rv = requests.get(url, headers=headers)
+	if rv.status_code == 200:
+		return True
+	else:
+		return False
+	
+	
 
 def uploadFile(filetoupload, token, target_path):
-	repo_source = "Development"
+	repo_source = "development"
 	filename = os.path.basename(filetoupload) 
 
 	
@@ -96,3 +105,9 @@ def websocketUpdate(headers, project, repo_source):
 	if rv.status_code != 200 and rv.status_code != 420:
 		print("Could not update task. Status code: {}\n{}".format(rv.status_code, rv.text))
 		sys.exit(1)
+
+
+def serverFlush(serverIP,ServerPort):
+	url = "http://{}:{}/_flush".format(serverIP,ServerPort)
+	requests.get(url)
+

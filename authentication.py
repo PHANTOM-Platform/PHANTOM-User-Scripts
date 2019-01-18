@@ -18,11 +18,11 @@ print('user: ', args.user)
 print('password: ', args.password)
 
 if args.register == True:
-	repository.registed(args.user,args.password)
+	repository.register(args.user,args.password)
 
 tk = repository.authenticate(args.user,args.password)
 f = open(args.tk_path,"w")
-f.write(tk)
+f.write(str(tk))
 f.close()
 	
 

@@ -36,6 +36,9 @@ def main():
 	config_decoder["token"]=["#TOKEN#", auth_token]
 
 	#upload source code
+	if settings.root_path != '':
+		uploadRootFiles(settings.root_path, auth_token)
+		print("Uploading")
 
 	if settings.src_path != '':
 		print("Uploading source code...")
@@ -74,30 +77,45 @@ def getToken():
 	try: #attempts to read token
 		f=open(token_file,"r")
 		print("Token file found")
-		return f.read()
+		token=f.read()
+		if repository.isTokenValid(token) is True:
+			return token
+		else:
+			print("Token is invalid!!!")
+			token = getNewToken()
 
 	except: #token not found
 		print("Token file not found. Attempting login")
-		token=repository.authenticate(settings.user,settings.password)
+		token = getNewToken()
 
-		if token == 1:
-			print("Attempting to create a new user") # should we really do this?
+		if token == -1:
+			sys.exit(1)
+		else:
+			print("Authentication successfull. Saving token...")
+	f = open(token_file,"w")
+	f.write(str(token))
+	f.close()
+	print("Token saved!")
+	return token	
 
-			if repository.register(settings.user,settings.password) == 0:
-				print("User registered with success. Starting authentication")
-				token=repository.authenticate(settings.user,settings.password)
 
-				if token == 1:
-					sys.exit(1)
+def getNewToken():
+	token=repository.authenticate(settings.user,settings.password)
 
-		print("Authentication successfull. Saving token...")
-		f = open(token_file,"w")
-		f.write(token)
-		f.close()
-		print("Token saved!")
-		return token
+	if token == 1:
+		print("Attempting to create a new user") # should we really do this?
+		if repository.register(settings.user,settings.password) == 0:
+			print("User registered with success. Starting authentication")
+			token=repository.authenticate(settings.user,settings.password)
 
-					
+			if token == 1:
+				return -1
+
+		else:
+			print("Error during registering!!!!")
+			return -1
+	
+	return token			
 		
 
 def listFiles(path_dir):
@@ -110,6 +128,14 @@ def listFiles(path_dir):
 		for name in files:
 			allfiles.append(join(root,name))
 	return allfiles
+
+def uploadRootFiles(pathdir, token):
+	rootFiles = {"Makefile","cla.in"}
+	fnames = listdir(pathdir)
+	for f in fnames:
+		filepath=join(pathdir, f)
+		if isfile(filepath) and f in rootFiles:
+			repository.uploadFile(filepath, token, relativePath(pathdir, "", filepath))
 
 
 def uploadAllFiles(path_dir, token, repo_folder):

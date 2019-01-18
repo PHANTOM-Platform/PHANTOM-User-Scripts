@@ -1,7 +1,9 @@
-
+###################################
+### Repositories configurations ###
+###################################
 
 # Set the Repository IP address and port
-repository_ip = "127.0.0.1"
+repository_ip = "localhost"
 repository_port = 8000
 
 
@@ -21,23 +23,35 @@ monitoring_port = 3033
 user = "qwerty@ytrewq"
 password = "1234"
 
+##################################
+### Application configurations ###
+##################################
 
 # Name of the application
 app_name = "test_app"
 
 ## Paths of folders
+# Root of application (to upload makefile and cla.in)
+root_path = "/home/demo/phantom-tools/Examples/WINGStest3"
 
 # folder with source code
-src_path = ""
+src_path = "/home/demo/phantom-tools/Examples/WINGStest3/src"
 
 # folder with description files
-desc_path = ""
+desc_path = "/home/demo/phantom-tools/Examples/WINGStest3/description"
+
+# Name of the component network file to be used
+comp_network= ""
+
+# Name of platform description to be used
+platf_desc = ""
 
 # folder with inputs
 inputs_path = ""
 
-
-### Tools Configuration ###
+############################
+### Tools Configurations ###
+############################
 
 ## MOM ##
 # MOM location
@@ -56,6 +70,6 @@ PT_binID = 6
 ## DM ##
 # DM location
 DM_path = "/home/demo/phantom-tools/DeploymentManager-Release20190108"
-DM_mode = "test"
+DM_mode = "normal"
 DM_binID = 6
 
