@@ -23,6 +23,10 @@ config_decoder = {
 	"token" : ["#TOKEN#", "No_Token"],
 	"PT_mode" : ["#PT_MODE#",settings.PT_mode],
 	"PT_binID" : ["#PT_BIN_ID#",settings.PT_binID],
+	"CompPath" : ["#COMPNETPATH#",settings.CompNetPath],
+	"CompName" : ["#COMPNETNAME#",settings.CompNetName],
+	"PlatPath" : ["#PLATDESPATH#",settings.PlatDesPath],
+	"Platname" : ["#PlatDesName#",settings.PlatDesName],
 	"DM_mode" : ["#DM_MODE#",settings.DM_mode],
 	"DM_binID" : ["#DM_BIN_ID#",settings.DM_binID]
 	
@@ -64,14 +68,14 @@ def main():
 
 	#configure and start PT
 
-	generatetConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "PT_binID"])
+	generatetConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "PT_binID", "CompPath", "CompName", "PlatPath", "Platname"])
 
-	newTerminal(settings.PT_path,['/usr/bin/java', '-jar', 'ParallelizationToolset-Release20190108.jar'])
+	newTerminal(settings.PT_path,['/usr/bin/java', '-jar', 'ParallelizationToolset.jar'])
 	
 	#configure and start DM
 
-	generatetConfigFile(settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode", "DM_binID"])
-	newTerminal(settings.DM_path,['/usr/bin/java', '-jar', 'DeploymentManager-Release20190108.jar'])
+	generatetConfigFile(settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode", "DM_binID", "CompPath", "CompName", "PlatPath", "Platname"])
+	newTerminal(settings.DM_path,['/usr/bin/java', '-jar', 'DeploymentManager.jar'])
 	
 def getToken():
 	try: #attempts to read token

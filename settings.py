@@ -49,6 +49,11 @@ platf_desc = ""
 # folder with inputs
 inputs_path = ""
 
+CompNetPath = "description" 
+CompNetName = "cpn.xml" #Name of the component network file to be used
+PlatDesPath = "description"
+PlatDesName = "hw.xml"   #Name of the platform description file to be used
+
 ############################
 ### Tools Configurations ###
 ############################
@@ -63,13 +68,15 @@ MOM_plat_desc = "Platform-Description.xml"
 
 ## PT ##
 # PT location
-PT_path = "/home/demo/phantom-tools/ParallelizationToolset-Release20190108"
-PT_mode = "test"
-PT_binID = 6
+PT_path = "/home/demo/phantom-tools/ParallelizationToolset-Release20190118"
+PT_mode = "normal" #operation mode: normal | test
+PT_binID = 6 #
+
+
 
 ## DM ##
 # DM location
-DM_path = "/home/demo/phantom-tools/DeploymentManager-Release20190108"
-DM_mode = "normal"
+DM_path = "/home/demo/phantom-tools/DeploymentManager-Release20190118"
+DM_mode = "normal" #operation mode: normal | test
 DM_binID = 6
 
