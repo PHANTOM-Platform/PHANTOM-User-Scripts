@@ -29,21 +29,41 @@ def register(user,pwd):
 	"""
 	Register a new user in the repository
 	"""
-	repo_token_url = "http://{}:{}/signup?email={}&pw={}".format(settings.repository_ip, settings.repository_port, user, pwd)
-	try:
-		headers = {'content-type': 'application/json'}
-		rv = requests.post(repo_token_url, headers=headers)
-		serverFlush(settings.repository_ip, settings.repository_port)
-		if rv.status_code != 400:
-			print("Could not log in to repository. Status code: {}\n{}".format(rv.status_code, rv.text))
-			return 1
-		else:
-			print("User: {} was successfully registred!".format(user))
-			return 0
-	except requests.exceptions.ConnectionError as e:
-		print("ERRROR: Connection refused when connecting to the repository during registry.")
-		print(str(e))
-		sys.exit(1)
+
+	servers = {
+		"Repository": (settings.repository_ip, settings.repository_port),
+		"Application Manager": (settings.app_manager_ip, settings.app_manager_port), 
+		"Execution Manager": (settings.exe_manager_ip, settings.exe_manager_port), 
+		"Monitoring Server": (settings.monitoring_ip, settings.monitoring_port)
+		}
+
+	failures = 0
+	for name, address in servers.items():
+
+		repo_token_url = "http://{}:{}/signup?email={}&pw={}".format(address[0], address[1], user, pwd)
+		try:
+			headers = {'content-type': 'text/plain'}
+			rv = requests.post(repo_token_url, headers=headers)
+			serverFlush(address[0], address[1])
+			if rv.status_code != 400:
+				print("Could not log in to {} repository. Status code: {}\n{}".format(name, rv.status_code, rv.text))
+				failures +=1
+			else:
+				print("User: {} was successfully registred in {}!".format(user, name))
+				
+		except requests.exceptions.ConnectionError as e:
+			print("ERRROR: Connection refused when connecting to the {} repository during registry.".format(name))
+			print(str(e))
+			failures += 1
+
+	
+	total_servers = len(servers)	
+	print(" User {} registered in {} of {} servers".format(user, total_servers-failures, total_servers))
+	if failures < total_servers:
+		return 0
+	else:
+		return 1
+
 
 def isTokenValid(token):
 	url = "http://{}:{}/verifytoken".format(settings.repository_ip, settings.repository_port)
