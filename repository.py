@@ -76,8 +76,8 @@ def isTokenValid(token):
 	
 	
 
-def uploadFile(filetoupload, token, target_path):
-	repo_source = "development"
+def uploadFile(filetoupload, token, target_path, repo_project, repo_source):
+	
 	filename = os.path.basename(filetoupload) 
 
 	
@@ -85,15 +85,15 @@ def uploadFile(filetoupload, token, target_path):
 		print("{} is not a valid file.".format(filetoupload))
 		sys.exit(1)
 	else:
-		print("Uploading {} to {}/{}/{}".format(filetoupload,settings.app_name,repo_source,target_path))
+		print("Uploading {} to {}/{}/{}".format(filetoupload,repo_project,repo_source,target_path))
 
 
-	url = "http://{}:{}/upload?project={}&source={}&DestFileName={}&Path={}".format(settings.repository_ip, settings.repository_port, settings.app_name, repo_source, filename, target_path)
+	url = "http://{}:{}/upload?project={}&source={}&DestFileName={}&Path={}".format(settings.repository_ip, settings.repository_port, repo_project, repo_source, filename, target_path)
 
 	headers = {'Authorization': "OAuth {}".format(token)}
 
 	uploadjson = "{{\"project\": \"{}\", \"source\": \"{}\", \"name\": \"{}\"}}"\
-		.format(settings.app_name, repo_source, filename)
+		.format(repo_project, repo_source, filename)
 
 	files = {
 		'UploadFile': open(filetoupload, "rb"),
@@ -107,7 +107,7 @@ def uploadFile(filetoupload, token, target_path):
 		sys.exit(1)
 
 	
-	websocketUpdate(headers, settings.app_name, repo_source)
+	websocketUpdate(headers, repo_project, repo_source)
 	
 
 	

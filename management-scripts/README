@@ -1,0 +1,21 @@
+## To uptade the software to the latest version in PHANTOM GitHub Repository (https://github.com/PHANTOM-Platform)
+
+bash update-tools.sh
+
+
+## Start servers using:
+
+bash start-server.sh
+
+
+## Repository database can be cleared using:
+
+bash clean_repo.sh
+
+## The user-specific tools are located in folder "User-tools"
+
+
+###### Stop servers using ####
+
+bash stop-servers.sh
+

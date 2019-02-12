@@ -26,7 +26,7 @@ config_decoder = {
 	"CompPath" : ["#COMPNETPATH#",settings.CompNetPath],
 	"CompName" : ["#COMPNETNAME#",settings.CompNetName],
 	"PlatPath" : ["#PLATDESPATH#",settings.PlatDesPath],
-	"Platname" : ["#PlatDesName#",settings.PlatDesName],
+	"Platname" : ["#PLATDESNAME#",settings.PlatDesName],
 	"DM_mode" : ["#DM_MODE#",settings.DM_mode],
 	"DM_binID" : ["#DM_BIN_ID#",settings.DM_binID]
 	
@@ -54,6 +54,14 @@ def main():
 		print("Uploading description files...")
 		uploadAllFiles(settings.desc_path, auth_token, "description")
 
+	#upload PHANTOM_FILES
+	
+	if settings.phantom_path != '':
+		print("Uploading PHANTOM files")
+
+		uploadPHANTOM_FILES(settings.phantom_path, auth_token,"")
+		
+
 	#upload inputs
 	if settings.inputs_path != '':
 		print("Uploading description files...")
@@ -62,13 +70,13 @@ def main():
 	#register app in application manager
 
 	#configure and start MOM
-	generatetConfigFile(settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name"])
+	generatetConfigFile(settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name", "CompName", "Platname"])
 
-	newTerminal(settings.MOM_path,['/usr/bin/java', '-jar', 'GA_MOM.jar','--online'])
+	newTerminal(settings.MOM_path,['/usr/bin/java', '-jar', 'GA_MOM.jar', '--manualData', '--online'])
 
 	#configure and start PT
 
-	generatetConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "PT_binID", "CompPath", "CompName", "PlatPath", "Platname"])
+	generatetConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "PT_binID", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
 
 	newTerminal(settings.PT_path,['/usr/bin/java', '-jar', 'ParallelizationToolset.jar'])
 	
@@ -139,14 +147,21 @@ def uploadRootFiles(pathdir, token):
 	for f in fnames:
 		filepath=join(pathdir, f)
 		if isfile(filepath) and f in rootFiles:
-			repository.uploadFile(filepath, token, relativePath(pathdir, "", filepath))
+			repository.uploadFile(filepath, token, relativePath(pathdir, "", filepath), settings.app_name,"development")
 
 
 def uploadAllFiles(path_dir, token, repo_folder):
 	files = listFiles(path_dir)
-	
+
 	for filePath in files:
-		repository.uploadFile(filePath, token, relativePath(path_dir, repo_folder, filePath))
+		repository.uploadFile(filePath, token, relativePath(path_dir, repo_folder, filePath), settings.app_name,"development")
+
+
+def uploadPHANTOM_FILES(path_dir, token, repo_folder):
+	files = listFiles(path_dir)
+
+	for filePath in files:
+		repository.uploadFile(filePath, token, relativePath(path_dir, repo_folder, filePath), "PHANTOM_FILES","DM")
 
 
 
@@ -165,7 +180,6 @@ def generatetConfigFile(dir_path,configFileName,listToConfigure):
 	try:
 		f_template = open(dir_path + "/configuration-template.txt", "r")
 		template = f_template.read()
-		print("Configuration Template Loaded")
 	
 	except:
 		print("Template file not found")
@@ -178,6 +192,7 @@ def generatetConfigFile(dir_path,configFileName,listToConfigure):
 	f_template = open(dir_path + configFileName, "w")
 	f_template.write(template)
 	f_template.close()
+	print("")
 		
 
 def newTerminal(workdir,command):
