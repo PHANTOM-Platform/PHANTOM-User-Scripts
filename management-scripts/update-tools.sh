@@ -4,7 +4,8 @@
 export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/dist/nodejs/bin:$PATH
 
 # GLOBAL Variables
-	BASE_DIR=$(pwd)/../../
+	THIS_DIR=$(pwd)
+	BASE_DIR=$(THIS_DIR)/../../
 	REPO_DIR=${BASE_DIR}/Repository
 	APPM_DIR=${BASE_DIR}/Application-Manager
 	EXE_DIR=${BASE_DIR}/Execution-Manager
@@ -61,7 +62,7 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 	git pull
 
 # Start servers
-	cd ${BASE_DIR}
+	cd ${THIS_DIR}
 	bash start-servers.sh
 
 
