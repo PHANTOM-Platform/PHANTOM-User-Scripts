@@ -5,7 +5,7 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 
 # GLOBAL Variables
 	THIS_DIR=$(pwd)
-	BASE_DIR=$(THIS_DIR)/../../
+	BASE_DIR=${THIS_DIR}/../../
 	REPO_DIR=${BASE_DIR}/Repository
 	APPM_DIR=${BASE_DIR}/Application-Manager
 	EXE_DIR=${BASE_DIR}/Execution-Manager
