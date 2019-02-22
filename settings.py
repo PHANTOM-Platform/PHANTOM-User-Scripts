@@ -43,7 +43,7 @@ password = "9834376081"
 ##################################
 
 # Name of the application
-app_name = "WINGStest3"
+app_name = "WINGStest33"
 
 ## Paths of folders
 # Root of application (to upload makefile and cla.in)
@@ -64,7 +64,7 @@ inputs_path = ""
 CompNetPath = "description" 
 CompNetName = "cpn.xml" #Name of the component network file to be used
 PlatDesPath = "description"
-PlatDesName = "hw.xml"   #Name of the platform description file to be used
+PlatDesName = "hw_local.xml"   #Name of the platform description file to be used
 
 ############################
 ### Tools Configurations ###
@@ -72,7 +72,7 @@ PlatDesName = "hw.xml"   #Name of the platform description file to be used
 
 ## MOM ##
 # MOM location
-MOM_path = "/home/demo/phantom-tools/GenericMOM-Release20180122"
+MOM_path = "/home/demo/phantom-tools/GenericMOM"
 # Component network file to be used
 MOM_cmp_net = "Component-Network.xml"
 # Platform description to be used
@@ -80,15 +80,16 @@ MOM_plat_desc = "Platform-Description.xml"
 
 ## PT ##
 # PT location
-PT_path = "/home/demo/phantom-tools/ParallelizationToolset-Release20190118"
-PT_mode = "normal" #operation mode: normal | test
+PT_path = "/home/demo/phantom-tools/ParallelizationToolset"
+#PT_mode = "normal" #operation mode: normal | test
+PT_mode = "exec"
 PT_binID = 6 #
 
 
 
 ## DM ##
 # DM location
-DM_path = "/home/demo/phantom-tools/DeploymentManager-Release20190118"
-DM_mode = "normal" #operation mode: normal | test
+DM_path = "/home/demo/phantom-tools/DeploymentManager"
+DM_mode = "exec" #operation mode: normal | test
 DM_binID = 6
 
