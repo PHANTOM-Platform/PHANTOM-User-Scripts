@@ -16,11 +16,11 @@ echo "#########################################"
 echo 
 echo "########## Cleaning Repository ##########"
 # Change wordir to scripts folder
-	cd ${REPO_DIR}/api_bash_scripts
+	cd ${REPO_DIR}/api_bash_scripts &&
 
 
 # Delete current DB
-	bash delete_db.sh
+	bash delete_db.sh &&
 
 # Create new DB
 	bash create_db.sh
@@ -31,7 +31,7 @@ echo "########## Cleaning Execution Manager ##########"
 	curl -XDELETE localhost:9400/exec_manager_db
 
 	#Setup new Execution Manager
-	cd ${EXE_DIR}
+	cd ${EXE_DIR} &&
 	bash setup-new-execmanager-server.sh
 
 
@@ -42,11 +42,11 @@ echo "########## Cleaning Application Manager ##########"
 	curl -XDELETE localhost:9400/app_manager_db
 
 	#Setup new Application Manager
-	cd ${APP_DIR}
+	cd ${APP_DIR} &&
 	bash setup-new-app-manager-server.sh
 
 echo "####### Removing Authentication Token #######"
-	cd ${SCRIPT_DIR}
+	cd ${SCRIPT_DIR} &&
 	rm -f token.txt
 
 echo
@@ -59,19 +59,19 @@ echo
 	shopt -s extglob 
 echo "############ Cleaning MOM #############"
 
-	cd ${MOM_DIR}
+	cd ${MOM_DIR} &&
 	rm -rf -- !(configuration-template.txt|GA_MOM.jar)
 
 echo
 echo "############ Cleaning PT #############"
 	
-	cd ${PT_DIR}
+	cd ${PT_DIR} &&
 	rm -rf -- !(configuration-template.txt|ParallelizationToolset.jar)
 
 echo
 echo "############ Cleaning DM #############"
 	
-	cd ${DM_DIR}
+	cd ${DM_DIR} &&
 	rm -rf -- !(configuration-template.txt|DeploymentManager.jar)
 
 
