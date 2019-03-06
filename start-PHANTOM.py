@@ -97,18 +97,24 @@ def main():
 	#configure and start MOM
 	generatetConfigFile(settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name", "CompName", "Platname"])
 
-	newTerminal(settings.MOM_path,['/usr/bin/java', '-jar', 'GA_MOM.jar', '--manualData', '--online'])
+	newTerminal(settings.MOM_path,'/usr/bin/java -jar GA_MOM.jar --manualData --online', 'MOM')
 
 	#configure and start PT
 
 	generatetConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
 
-	newTerminal(settings.PT_path,['/usr/bin/java', '-jar', 'ParallelizationToolset.jar'])
+	newTerminal(settings.PT_path,'/usr/bin/java -jar ParallelizationToolset.jar', 'PT')
+
+	#configure and start PT
+
+#	generatetConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
+
+#	newTerminal(settings.PT_path,['/usr/bin/java', '-jar', 'ParallelizationToolset.jar'], 'DM')
 	
 	#configure and start DM
 
 	generatetConfigFile(settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode","exeman_ip", "exeman_port", "CompPath", "CompName", "PlatPath", "Platname"])
-	newTerminal(settings.DM_path,['/usr/bin/java', '-jar', 'DeploymentManager.jar'])
+	newTerminal(settings.DM_path,'/usr/bin/java -jar DeploymentManager.jar','DM')
 	
 def getToken():
 	try: #attempts to read token
@@ -220,8 +226,9 @@ def generatetConfigFile(dir_path,configFileName,listToConfigure):
 	print("")
 		
 
-def newTerminal(workdir,command):
-	return subprocess.Popen(['gnome-terminal' ,'--profile=NoClosing', '--working-directory=' + workdir, '-x'] + command)	
+def newTerminal(workdir,command,title):
+#	return subprocess.Popen(['gnome-terminal' ,'--profile=NoClosing', '--working-directory=' + workdir, '-x'] + command)	
+	return subprocess.Popen(['xterm' ,'-xrm', '''XTerm.vt100.allowTitleOps: false''','-hold','-fa', 'Monospace', '-fs','11','-T',title, '-e' ,command],cwd=workdir)	
 
 # Utils
 
