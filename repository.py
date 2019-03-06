@@ -126,6 +126,27 @@ def websocketUpdate(headers, project, repo_source):
 		print("Could not update task. Status code: {}\n{}".format(rv.status_code, rv.text))
 		sys.exit(1)
 
+def websocketUpdateStatus(project, source, status,token):
+	"""
+	Ping an update to the Application Manager for the project
+	"""
+
+	
+	headers = {'Authorization': "OAuth {}".format(token)}
+	
+	uploadjson = "{{\"project\": \"{}\", \"{}\":{{\"status\":\"{}\"}} }}".format(project, source, status)
+	
+	url = "http://{}:{}/update_project_tasks".format(settings.app_manager_ip, settings.app_manager_port)
+
+	rv = requests.post(url, files={'UploadJSON': uploadjson}, headers=headers)
+
+	if rv.status_code != 200 and rv.status_code != 420:
+		print("Could not update task. Status code: {}\n{}".format(rv.status_code, rv.text))
+		sys.exit(1)
+	
+	serverFlush(settings.app_manager_ip, settings.app_manager_port)
+
+
 
 def serverFlush(serverIP,ServerPort):
 	url = "http://{}:{}/_flush".format(serverIP,ServerPort)

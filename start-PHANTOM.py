@@ -8,6 +8,12 @@ import settings, repository
 
 token_file = "token.txt"
 
+parser = argparse.ArgumentParser(description='Tool to support the execution of an application on PHANTOM Framework')
+parser.add_argument('-u', '--noUpload', dest='noUpload', action='store_true' , help='Do not (re)upload the application to the repository. (Application should be already in repository)')
+parser.add_argument('-i', '--skipInputs', dest='noInputs', action='store_true' , help='Do not (re)upload the application inputs to the repository. (Inputs should be already in repository)')
+parser.add_argument('-c', '--clean', dest='clean', action='store_true' , help='Clean all the data in repositories and temporary cache on PHANTOM tools')
+
+
 config_decoder = {
 	"user": ["#USER#", settings.user],
 	"pwd" : ["#PWD#", settings.password],
@@ -22,37 +28,51 @@ config_decoder = {
 	"app_name" : ["#APPNAME#", settings.app_name],
 	"token" : ["#TOKEN#", "No_Token"],
 	"PT_mode" : ["#PT_MODE#",settings.PT_mode],
-	"PT_binID" : ["#PT_BIN_ID#",settings.PT_binID],
 	"CompPath" : ["#COMPNETPATH#",settings.CompNetPath],
 	"CompName" : ["#COMPNETNAME#",settings.CompNetName],
 	"PlatPath" : ["#PLATDESPATH#",settings.PlatDesPath],
 	"Platname" : ["#PLATDESNAME#",settings.PlatDesName],
-	"DM_mode" : ["#DM_MODE#",settings.DM_mode],
-	"DM_binID" : ["#DM_BIN_ID#",settings.DM_binID]
+	"DM_mode" : ["#DM_MODE#",settings.DM_mode]
+
 	
 }
 
+
+
 def main():
+	
+	args = parser.parse_args()
+
+	if args.clean:
+		process=subprocess.Popen(['bash','/home/demo/Desktop/phantom-tools/User-tools/management-scripts/clean-installation.sh'],
+                         stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE,cwd="./management-scripts")
+		stdoutdata,stderrdata=process.communicate(input=b'y\n')
+		process.wait()
+		print(stdoutdata)
+		print(stderrdata)
 	
 	#authentication verification
 	auth_token = getToken()
 	
 	config_decoder["token"]=["#TOKEN#", auth_token]
 
-	#upload source code
-	if settings.root_path != '':
-		uploadRootFiles(settings.root_path, auth_token)
-		print("Uploading")
+	if not args.noUpload:
+		#upload source code
+		if settings.root_path != '':
+			uploadRootFiles(settings.root_path, auth_token)
+			print("Uploading")
 
-	if settings.src_path != '':
-		print("Uploading source code...")
-		uploadAllFiles(settings.src_path, auth_token, "src")
+		if settings.src_path != '':
+			print("Uploading source code...")
+			uploadAllFiles(settings.src_path, auth_token, "src")
 
-	#upload descriptions
+		#upload descriptions
 
-	if settings.desc_path != '':
-		print("Uploading description files...")
-		uploadAllFiles(settings.desc_path, auth_token, "description")
+		if settings.desc_path != '':
+			print("Uploading description files...")
+			uploadAllFiles(settings.desc_path, auth_token, "description")
 
 	#upload PHANTOM_FILES
 	
@@ -62,12 +82,17 @@ def main():
 		uploadPHANTOM_FILES(settings.phantom_path, auth_token,"")
 		
 
-	#upload inputs
-	if settings.inputs_path != '':
-		print("Uploading description files...")
-		uploadAllFiles(settings.inputs_path, auth_token, "inputs")	
+	if not args.noInputs:
+		#upload inputs
+		if settings.inputs_path != '':
+			print("Uploading description files...")
+			uploadAllFiles(settings.inputs_path, auth_token, "inputs")	
+
+	
+
 
 	#register app in application manager
+	repository.websocketUpdateStatus(settings.app_name, "development", "finished", auth_token)
 
 	#configure and start MOM
 	generatetConfigFile(settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name", "CompName", "Platname"])
@@ -76,13 +101,13 @@ def main():
 
 	#configure and start PT
 
-	generatetConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "PT_binID", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
+	generatetConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
 
 	newTerminal(settings.PT_path,['/usr/bin/java', '-jar', 'ParallelizationToolset.jar'])
 	
 	#configure and start DM
 
-	generatetConfigFile(settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode", "DM_binID", "CompPath", "CompName", "PlatPath", "Platname"])
+	generatetConfigFile(settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode","exeman_ip", "exeman_port", "CompPath", "CompName", "PlatPath", "Platname"])
 	newTerminal(settings.DM_path,['/usr/bin/java', '-jar', 'DeploymentManager.jar'])
 	
 def getToken():

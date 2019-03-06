@@ -43,7 +43,7 @@ password = "9834376081"
 ##################################
 
 # Name of the application
-app_name = "WINGStest33"
+app_name = "WINGStest3"
 
 ## Paths of folders
 # Root of application (to upload makefile and cla.in)
@@ -83,7 +83,6 @@ MOM_plat_desc = "Platform-Description.xml"
 PT_path = "/home/demo/phantom-tools/ParallelizationToolset"
 #PT_mode = "normal" #operation mode: normal | test
 PT_mode = "exec"
-PT_binID = 6 #
 
 
 
@@ -91,5 +90,4 @@ PT_binID = 6 #
 # DM location
 DM_path = "/home/demo/phantom-tools/DeploymentManager"
 DM_mode = "exec" #operation mode: normal | test
-DM_binID = 6
 

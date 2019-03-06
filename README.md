@@ -10,7 +10,20 @@ In this file, the user should validate and update several fields. This file is c
 
 After the configuration of the `settings.py`, the user needs to open a terminal and run the command:
 
-`./upload-app.py`
+`./start-PHANTOM.py`
+
+usage: start-PHANTOM.py [-h] [-u] [-i] [-c]
+
+Tool to support the execution of an application on PHANTOM Framework
+
+optional arguments:
+  -h, --help        show this help message and exit
+  -u, --noUpload    Do not (re)upload the application to the repository.
+                    (Application should be already in repository)
+  -i, --skipInputs  Do not (re)upload the application inputs to the
+                    repository. (Inputs should be already in repository)
+  -c, --clean       Clean all the data in repositories and temporary cache on
+                    PHANTOM tools
 
 This command will:
 1. Try to authenticate the user on the Repository and get the corresponding authentication token
