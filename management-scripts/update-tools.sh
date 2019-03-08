@@ -24,45 +24,45 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 	printf "\n##################################################\n"	
 	printf "##### Updating Repository...\n"
 	printf "##################################################\n"
-	cd $REPO_DIR
-	git pull
+	cd $REPO_DIR &&
+	git pull &&
 	cp {package.json,package-lock.json} ${SERVERS_DIR}
-	cd ${SERVERS_DIR}
+	cd ${SERVERS_DIR} &&
 	npm update
 
 
 	printf "\n##################################################\n"
 	printf "##### Updating APP Manager...\n"
 	printf "##################################################\n"
-	cd $APPM_DIR
+	cd $APPM_DIR &&
 	git pull
 	
 	printf "\n##################################################\n"
 	printf "##### Updating Execution Manager...\n"
 	printf "##################################################\n"
-	cd $EXE_DIR
+	cd $EXE_DIR &&
 	git pull
 	
 	printf "\n##################################################\n"
 	printf "##### Updating Resource Manager...\n"
 	printf "##################################################\n"
-	cd $RES_DIR
+	cd $RES_DIR &&
 	git pull
 	
 	printf "\n##################################################\n"
 	printf "##### Updating OfflineMOM...\n"
 	printf "##################################################\n"
-	cd $OffMOM_DIR
+	cd $OffMOM_DIR &&
 	git pull
 
 	printf "\n##################################################\n"
 	printf "##### Updating User-tools...\n"
 	printf "##################################################\n"
-	cd $USER_DIR
+	cd $USER_DIR  &&
 	git pull
 
 # Start servers
-	cd ${THIS_DIR}
+	cd ${THIS_DIR} &&
 	bash start-servers.sh
 
 
