@@ -58,6 +58,10 @@ desc_path = "/home/demo/phantom-tools/Examples/WINGStest3/description"
 #folder with PHANTOM API
 phantom_path = "/home/demo/Desktop/phantom-tools/PHANTOM_FILES/DM"
 
+#Link to the where the marketplace is hosted
+ipMarket_path = "https://github.com/PHANTOM-Platform/PHANTOM-IP-Core-Marketplace.git"
+ip_folder = "IPCore-MarketPlace"
+
 # folder with inputs
 inputs_path = ""
 
@@ -84,7 +88,9 @@ PT_path = "/home/demo/phantom-tools/ParallelizationToolset"
 #PT_mode = "normal" #operation mode: normal | test
 PT_mode = "exec"
 
-
+## IPCore-Gen ##
+# IPCore-gen Location
+IP_path= "/home/demo/Desktop/phantom-tools/IP-Core-Generator"
 
 ## DM ##
 # DM location

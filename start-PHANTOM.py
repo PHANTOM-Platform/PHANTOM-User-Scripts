@@ -12,6 +12,8 @@ parser = argparse.ArgumentParser(description='Tool to support the execution of a
 parser.add_argument('-u', '--noUpload', dest='noUpload', action='store_true' , help='Do not (re)upload the application to the repository. (Application should be already in repository)')
 parser.add_argument('-i', '--skipInputs', dest='noInputs', action='store_true' , help='Do not (re)upload the application inputs to the repository. (Inputs should be already in repository)')
 parser.add_argument('-c', '--clean', dest='clean', action='store_true' , help='Clean all the data in repositories and temporary cache on PHANTOM tools')
+parser.add_argument('-m', '--ipmarket', dest='ipMarket', action='store_true' , help='Uploads the IP Core Market place to the repository')
+
 
 
 config_decoder = {
@@ -57,6 +59,23 @@ def main():
 	auth_token = getToken()
 	
 	config_decoder["token"]=["#TOKEN#", auth_token]
+
+	if args.ipMarket:
+		#Downloads Ipcores
+		print("Downloading Marketplace...")
+		code = subprocess.call(['git','clone',settings.ipMarket_path,settings.ip_folder])
+		
+		if code == 0:
+			print("Uploading IP Cores...")
+			uploadMarket(settings.ip_folder, auth_token,"")
+			print("Cleaning local marketplace")
+			code = subprocess.call(['rm','-rf',settings.ip_folder])
+		else:
+			print("Unable to download the IPCore Marketplace")
+			
+
+		
+	
 
 	if not args.noUpload:
 		#upload source code
@@ -107,9 +126,9 @@ def main():
 
 	#configure and start PT
 
-#	generatetConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
+	generatetConfigFile(settings.IP_path, "settings.py", ["user", "pwd", "repo_ip", "repo_port", "appman_ip","appman_port", "CompName"])
 
-#	newTerminal(settings.PT_path,['/usr/bin/java', '-jar', 'ParallelizationToolset.jar'], 'DM')
+	newTerminal(settings.IP_path,'/usr/bin/python3 ipcore-generator.py subscribe ' + settings.app_name, 'IPCore-Gen')
 	
 	#configure and start DM
 
@@ -196,6 +215,12 @@ def uploadPHANTOM_FILES(path_dir, token, repo_folder):
 
 
 
+def uploadMarket(path_dir, token, repo_folder):
+	files = listFiles(path_dir)
+
+	for filePath in files:
+		repository.uploadFile(filePath, token, relativePath(path_dir, repo_folder, filePath), "IPCore-Marketplace","DM")
+
 def relativePath(root, repo_folder,fullPath):
 	path =  fullPath.replace(root,'')
 	remote_path =  str(repo_folder) + dirname(path)
@@ -228,7 +253,7 @@ def generatetConfigFile(dir_path,configFileName,listToConfigure):
 
 def newTerminal(workdir,command,title):
 #	return subprocess.Popen(['gnome-terminal' ,'--profile=NoClosing', '--working-directory=' + workdir, '-x'] + command)	
-	return subprocess.Popen(['xterm' ,'-xrm', '''XTerm.vt100.allowTitleOps: false''','-hold','-fa', 'Monospace', '-fs','11','-T',title, '-e' ,command],cwd=workdir)	
+	return subprocess.Popen(['xterm' ,'-hold','-fa', 'Monospace', '-fs','11','-T',title, '-e' ,command],cwd=workdir)	
 
 # Utils
 
