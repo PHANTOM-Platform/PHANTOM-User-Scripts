@@ -8,7 +8,7 @@ In this file, the user should validate and update several fields. This file is c
 - The second section corresponds to an area where the user provides some information about the application to be analysed bu PHANTOM tools, where is identified the name of the app and the path where the files are stored
 - In the last  section, can be defined some tool-specific configurations like the path to where each tool is deployed and some arguments required to the correct execution each tool 
 
-After the configuration of the `settings.py`, the user needs to open a terminal and run the command:
+<b> After the configuration of the `settings.py`, the user needs to open a terminal and run the command:</b>
 
 `./start-PHANTOM.py`
 
