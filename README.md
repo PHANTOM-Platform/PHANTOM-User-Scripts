@@ -2,7 +2,7 @@
 
 Tools designed to aid a User to configure and interact with PHANTOM tools. The purpose of these tools is to automatize most of the work needed, handling the authentication and registering processes, configuration, and execution of PHANTOM tools.
 
-Before running any tool, the User must update the configurations first. These configurations are stored in the file `settings.py`.
+Before running any tool, <b> the User must update the configurations first </b>. These configurations are stored in the file `settings.py`.
 In this file, the user should validate and update several fields. This file is composed of three main sections:
 - First is a section where the user should update the port and address of the repositories, as well as define the credentials for authentication in the servers
 - The second section corresponds to an area where the user provides some information about the application to be analysed bu PHANTOM tools, where is identified the name of the app and the path where the files are stored
