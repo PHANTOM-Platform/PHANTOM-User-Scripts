@@ -107,10 +107,6 @@ def uploadFile(filetoupload, token, target_path, repo_project, repo_source):
 		sys.exit(1)
 
 	
-	websocketUpdate(headers, repo_project, repo_source)
-	
-
-	
 			
 def websocketUpdate(headers, project, repo_source):
 	"""
