@@ -44,7 +44,7 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 		sudo apt-get install -y subversion &&
 		echo "subversion is installed"
 	fi
-	svn export https://github.com/PHANTOM-Platform/Monitoring/trunk/Monitoring_client Monitoring
+	svn export --force https://github.com/PHANTOM-Platform/Monitoring/trunk/Monitoring_client Monitoring
 
 	printf "\n##################################################\n"
 	printf "##### Updating APP Manager...\n"
