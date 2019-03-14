@@ -105,12 +105,6 @@ def uploadFile(filetoupload, token, target_path, repo_project, repo_source):
 	if rv.status_code != 200  and rv.status_code != 420:
 		print("Could not upload file to repository. Status code: {}\n{}".format(rv.status_code, rv.text))
 		sys.exit(1)
-
-	
-#	websocketUpdate(headers, repo_project, repo_source)
-	
-
-	
 			
 def websocketUpdate(headers, project, repo_source):
 	"""

@@ -2,28 +2,38 @@
 
 Tools designed to aid a User to configure and interact with PHANTOM tools. The purpose of these tools is to automatize most of the work needed, handling the authentication and registering processes, configuration, and execution of PHANTOM tools.
 
-Before running any tool, the User must update the configurations first. These configurations are stored in the file `settings.py`.
+Before running any tool, <b> the User must update the configurations first </b>. These configurations are stored in the file `settings.py`.
 In this file, the user should validate and update several fields. This file is composed of three main sections:
 - First is a section where the user should update the port and address of the repositories, as well as define the credentials for authentication in the servers
 - The second section corresponds to an area where the user provides some information about the application to be analysed bu PHANTOM tools, where is identified the name of the app and the path where the files are stored
 - In the last  section, can be defined some tool-specific configurations like the path to where each tool is deployed and some arguments required to the correct execution each tool 
 
-After the configuration of the `settings.py`, the user needs to open a terminal and run the command:
+<b> After the configuration of the `settings.py`, the user needs to open a terminal and run the command:</b>
 
 `./start-PHANTOM.py`
 
-usage: start-PHANTOM.py [-h] [-u] [-i] [-c]
+usage: start-PHANTOM.py [-h] [-u] [-i] [-c] [-m] [-p]
 
 Tool to support the execution of an application on PHANTOM Framework
 
 optional arguments:
-  -h, --help        show this help message and exit
-  -u, --noUpload    Do not (re)upload the application to the repository.
-                    (Application should be already in repository)
-  -i, --skipInputs  Do not (re)upload the application inputs to the
-                    repository. (Inputs should be already in repository)
-  -c, --clean       Clean all the data in repositories and temporary cache on
-                    PHANTOM tools
+
+  -h, --help          show this help message and exit
+
+  -u, --noUpload      Do not (re)upload the application to the repository.
+                      (Application should be already in repository)
+
+  -i, --skipInputs    Do not (re)upload the application inputs to the
+                      repository. (Inputs should be already in repository)
+
+  -c, --clean         Clean all the data in repositories and temporary cache
+                      on PHANTOM tools
+
+  -m, --ipmarket      Uploads the IP Core Market place to the repository
+
+  -p, --phantomfiles  Uploads the PHANTOM files (PHANTOM API and Monitoring
+                      API)
+
 
 This command will:
 1. Try to authenticate the user on the Repository and get the corresponding authentication token
