@@ -92,8 +92,8 @@ def uploadFile(filetoupload, token, target_path, repo_project, repo_source):
 
 	headers = {'Authorization': "OAuth {}".format(token)}
 
-	uploadjson = "{{\"project\": \"{}\", \"source\": \"{}\", \"name\": \"{}\"}}"\
-		.format(repo_project, repo_source, filename)
+	uploadjson = "{{\"project\": \"{}\", \"source\": \"{}\", \"name\": \"{}\"}}".format(repo_project, repo_source, filename)
+	
 
 	files = {
 		'UploadFile': open(filetoupload, "rb"),
@@ -107,7 +107,7 @@ def uploadFile(filetoupload, token, target_path, repo_project, repo_source):
 		sys.exit(1)
 
 	
-	websocketUpdate(headers, repo_project, repo_source)
+#	websocketUpdate(headers, repo_project, repo_source)
 	
 
 	

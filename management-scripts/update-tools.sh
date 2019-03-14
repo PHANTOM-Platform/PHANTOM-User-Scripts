@@ -13,9 +13,10 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 	MON_DIR=${BASE_DIR}/Monitoring/Monitoring_server
 	OffMOM_DIR=${BASE_DIR}/OfflineMOM
 	USER_DIR=${BASE_DIR}/User-tools
-	SERVERS_DIR=/home/demo/phantom_servers/
+	API_FILE=${BASE_DIR}/PHANTOM_FILES
+	SERVERS_DIR=/home/demo/phantom_servers
 
-	
+	PASS=password
 
 # Stop servers
 	bash stop-servers.sh
@@ -30,6 +31,20 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 	cd ${SERVERS_DIR} &&
 	npm update
 
+	printf "\n##################################################\n"
+	printf "##### Updating Monitoring API files...\n"
+	printf "##################################################\n"
+	cd $API_FILE &&
+	which svn > /dev/null
+	if [ $? -eq 1 ]; then
+    		echo "Subversion is not installed"
+		echo "Attempting to install..."
+		echo $PASS | sudo -S echo "" &&
+		sudo apt-get update && 
+		sudo apt-get install -y subversion &&
+		echo "subversion is installed"
+	fi
+	svn export https://github.com/PHANTOM-Platform/Monitoring/trunk/Monitoring_client Monitoring
 
 	printf "\n##################################################\n"
 	printf "##### Updating APP Manager...\n"

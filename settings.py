@@ -56,7 +56,7 @@ src_path = "/home/demo/phantom-tools/Examples/WINGStest3/src"
 desc_path = "/home/demo/phantom-tools/Examples/WINGStest3/description"
 
 #folder with PHANTOM API
-phantom_path = "/home/demo/Desktop/phantom-tools/PHANTOM_FILES/DM"
+phantom_path = "/home/demo/Desktop/phantom-tools/PHANTOM_FILES"
 
 #Link to the where the marketplace is hosted
 ipMarket_path = "https://github.com/PHANTOM-Platform/PHANTOM-IP-Core-Marketplace.git"
@@ -86,7 +86,7 @@ MOM_plat_desc = "Platform-Description.xml"
 # PT location
 PT_path = "/home/demo/phantom-tools/ParallelizationToolset"
 #PT_mode = "normal" #operation mode: normal | test
-PT_mode = "exec"
+PT_mode = "off" #operation mode: on | off - "on" to run PT normally, "off" to skip  code analysis process
 
 ## IPCore-Gen ##
 # IPCore-gen Location

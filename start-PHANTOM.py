@@ -3,7 +3,7 @@
 from os import listdir, walk
 from os.path import isfile, join, exists, dirname
 
-import argparse, sys, subprocess
+import argparse, sys, subprocess, socket
 import settings, repository
 
 token_file = "token.txt"
@@ -13,6 +13,7 @@ parser.add_argument('-u', '--noUpload', dest='noUpload', action='store_true' , h
 parser.add_argument('-i', '--skipInputs', dest='noInputs', action='store_true' , help='Do not (re)upload the application inputs to the repository. (Inputs should be already in repository)')
 parser.add_argument('-c', '--clean', dest='clean', action='store_true' , help='Clean all the data in repositories and temporary cache on PHANTOM tools')
 parser.add_argument('-m', '--ipmarket', dest='ipMarket', action='store_true' , help='Uploads the IP Core Market place to the repository')
+parser.add_argument('-p', '--phantomfiles', dest='phFiles', action='store_true' , help='Uploads the PHANTOM files (PHANTOM API and Monitoring API)')
 
 
 
@@ -35,8 +36,6 @@ config_decoder = {
 	"PlatPath" : ["#PLATDESPATH#",settings.PlatDesPath],
 	"Platname" : ["#PLATDESNAME#",settings.PlatDesName],
 	"DM_mode" : ["#DM_MODE#",settings.DM_mode]
-
-	
 }
 
 
@@ -72,9 +71,6 @@ def main():
 			code = subprocess.call(['rm','-rf',settings.ip_folder])
 		else:
 			print("Unable to download the IPCore Marketplace")
-			
-
-		
 	
 
 	if not args.noUpload:
@@ -95,7 +91,7 @@ def main():
 
 	#upload PHANTOM_FILES
 	
-	if settings.phantom_path != '':
+	if args.phFiles and settings.phantom_path != '':
 		print("Uploading PHANTOM files")
 
 		uploadPHANTOM_FILES(settings.phantom_path, auth_token,"")
@@ -114,25 +110,25 @@ def main():
 	repository.websocketUpdateStatus(settings.app_name, "development", "finished", auth_token)
 
 	#configure and start MOM
-	generatetConfigFile(settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name", "CompName", "Platname"])
+	generateConfigFile(settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name", "CompName", "Platname"])
 
 	newTerminal(settings.MOM_path,'/usr/bin/java -jar GA_MOM.jar --manualData --online', 'MOM')
 
 	#configure and start PT
 
-	generatetConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
+	generateConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
 
 	newTerminal(settings.PT_path,'/usr/bin/java -jar ParallelizationToolset.jar', 'PT')
 
-	#configure and start PT
+	#configure and start IPCore-GEN
 
-	generatetConfigFile(settings.IP_path, "settings.py", ["user", "pwd", "repo_ip", "repo_port", "appman_ip","appman_port", "CompName"])
+#	generateConfigFile(settings.IP_path, "settings.py", ["user", "pwd", "repo_ip", "repo_port", "appman_ip","appman_port", "CompName"])
 
-	newTerminal(settings.IP_path,'/usr/bin/python3 ipcore-generator.py subscribe ' + settings.app_name, 'IPCore-Gen')
+#	newTerminal(settings.IP_path,'/usr/bin/python3 ipcore-generator.py subscribe ' + settings.app_name, 'IPCore-Gen')
 	
 	#configure and start DM
 
-	generatetConfigFile(settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode","exeman_ip", "exeman_port", "CompPath", "CompName", "PlatPath", "Platname"])
+	generateConfigFile(settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode","exeman_ip", "exeman_port", "CompPath", "CompName", "PlatPath", "Platname"])
 	newTerminal(settings.DM_path,'/usr/bin/java -jar DeploymentManager.jar','DM')
 	
 def getToken():
@@ -211,8 +207,9 @@ def uploadPHANTOM_FILES(path_dir, token, repo_folder):
 	files = listFiles(path_dir)
 
 	for filePath in files:
-		repository.uploadFile(filePath, token, relativePath(path_dir, repo_folder, filePath), "PHANTOM_FILES","DM")
-
+		source = "DM" if ("/DM/" in filePath) else "Monitoring"
+#		repository.uploadFile(filePath, token, relativePath(path_dir, repo_folder, filePath), "PHANTOM_FILES","DM" if ("/DM/" in filePath) else "Monitoring")
+		repository.uploadFile(filePath, token, relativePath(path_dir + '/' + source + '/', repo_folder, filePath), "PHANTOM_FILES",source)
 
 
 def uploadMarket(path_dir, token, repo_folder):
@@ -224,14 +221,14 @@ def uploadMarket(path_dir, token, repo_folder):
 def relativePath(root, repo_folder,fullPath):
 	path =  fullPath.replace(root,'')
 	remote_path =  str(repo_folder) + dirname(path)
-	if remote_path[-1] == '/':
+	if remote_path != '' and remote_path[-1] == '/':
 		return remote_path[:-1]
 	else:
 		return remote_path
 
 
 
-def generatetConfigFile(dir_path,configFileName,listToConfigure):
+def generateConfigFile(dir_path,configFileName,listToConfigure):
 	dir_path = enforce_trailing_slash(dir_path)
 	try:
 		f_template = open(dir_path + "/configuration-template.txt", "r")
@@ -249,11 +246,33 @@ def generatetConfigFile(dir_path,configFileName,listToConfigure):
 	f_template.write(template)
 	f_template.close()
 	print("")
+
+
+def generateRemoteConfigFile(dir_path,configFileName,listToConfigure):
+	dir_path = enforce_trailing_slash(dir_path)
+	try:
+		f_template = open(dir_path + "/configuration-template.txt", "r")
+		template = f_template.read()
+	
+	except:
+		print("Template file not found")
+		sys.exit(1)
+
+	for config in listToConfigure:
+		[pattern, value] = config_decoder[config]
+		if value == "localhost":
+			value = getIP()
+		template = template.replace(pattern,str(value))
+		
+	f_template = open(dir_path + configFileName, "w")
+	f_template.write(template)
+	f_template.close()
+	print("")
 		
 
 def newTerminal(workdir,command,title):
 #	return subprocess.Popen(['gnome-terminal' ,'--profile=NoClosing', '--working-directory=' + workdir, '-x'] + command)	
-	return subprocess.Popen(['xterm' ,'-hold','-fa', 'Monospace', '-fs','11','-T',title, '-e' ,command],cwd=workdir)	
+	return subprocess.Popen(['xterm' ,'-s','-si','-sk','-sb','-hold','-fa', 'Monospace', '-fs','11','-T',title, '-e' ,command],cwd=workdir)	
 
 # Utils
 
@@ -266,6 +285,17 @@ def enforce_trailing_slash(path):
 	else:
 		return path
 
+def getIP():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 
 if __name__ == "__main__":
