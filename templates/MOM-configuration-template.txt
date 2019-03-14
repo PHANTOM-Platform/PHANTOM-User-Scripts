@@ -1,0 +1,37 @@
+
+<configuration name="GenericMOM">
+	
+	<login value="#USER#" />
+	<password value="#PWD#" />
+
+	<!-- Configuration for remote repositories -->
+	
+	<ipAddress value="#REPO_IP#" />
+	
+	<targetPort target="Repository" value="#REPO_PORT#" />
+	
+	<!-- Application Manager -->
+	<targetPort target="ApplicationManager" value="#APPMAN_PORT#" /> 
+
+	<!-- Execution Manager -->
+	<targetPort target="ExecutionManager" value="#EXE_PORT#" /> 
+
+	<filepath value = "description" />
+	
+	<source value = "PT" />
+
+	<target value = "MOM" /> <!-- upload mappings to MOM (description folder) -->
+	
+	<componentNetworkFileName value = "#COMPNETNAME#" />
+	
+	<hardwarePlatformFileName value = "#PLATDESNAME#" />
+	
+	<subscription type="project" value="#APPNAME#" />
+
+
+	<!--Address of the monitoring server from which mom performs requests for monitoring metrics-->
+	<mfserveraddress value = "localhost" />
+	<!--Port of the monitoring server-->
+	<mfserverport value = "3033" />
+
+</configuration>

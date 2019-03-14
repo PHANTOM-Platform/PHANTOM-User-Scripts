@@ -86,7 +86,7 @@ MOM_plat_desc = "Platform-Description.xml"
 # PT location
 PT_path = "/home/demo/phantom-tools/ParallelizationToolset"
 #PT_mode = "normal" #operation mode: normal | test
-PT_mode = "off" #operation mode: on | off - "on" to run PT normally, "off" to skip  code analysis process
+PT_mode = "on" #operation mode: on | off - "on" to run PT normally, "off" to skip  code analysis process
 
 ## IPCore-Gen ##
 # IPCore-gen Location

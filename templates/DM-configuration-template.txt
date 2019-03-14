@@ -1,0 +1,15 @@
+usermail=#USER#
+project=#APPNAME#
+CompNetPath=#COMPNETPATH#
+CompNetName=#COMPNETNAME#
+PlatDesPath=#PLATDESPATH#
+PlatDesName=#PLATDESNAME#
+ipAddressRepo=#REPO_IP#
+portRepo=#REPO_PORT#
+ipAddressApp=#APPMAN_IP#
+portApp=#APPMAN_PORT#
+ipAddressMon=#MON_IP#
+portMon=#MON_PORT#
+token=#TOKEN#
+mode=#DM_MODE#
+binID=#DM_BIN_ID#

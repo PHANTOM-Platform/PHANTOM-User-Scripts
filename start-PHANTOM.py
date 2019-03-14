@@ -110,25 +110,25 @@ def main():
 	repository.websocketUpdateStatus(settings.app_name, "development", "finished", auth_token)
 
 	#configure and start MOM
-	generateConfigFile(settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name", "CompName", "Platname"])
+	generateConfigFile('MOM',settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name", "CompName", "Platname"])
 
 	newTerminal(settings.MOM_path,'/usr/bin/java -jar GA_MOM.jar --manualData --online', 'MOM')
 
 	#configure and start PT
 
-	generateConfigFile(settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
+	generateConfigFile('PT',settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
 
 	newTerminal(settings.PT_path,'/usr/bin/java -jar ParallelizationToolset.jar', 'PT')
 
 	#configure and start IPCore-GEN
 
-#	generateConfigFile(settings.IP_path, "settings.py", ["user", "pwd", "repo_ip", "repo_port", "appman_ip","appman_port", "CompName"])
+#	generateConfigFile("IPGEN",settings.IP_path, "settings.py", ["user", "pwd", "repo_ip", "repo_port", "appman_ip","appman_port", "CompName"])
 
 #	newTerminal(settings.IP_path,'/usr/bin/python3 ipcore-generator.py subscribe ' + settings.app_name, 'IPCore-Gen')
 	
 	#configure and start DM
 
-	generateConfigFile(settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode","exeman_ip", "exeman_port", "CompPath", "CompName", "PlatPath", "Platname"])
+	generateConfigFile('DM',settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode","exeman_ip", "exeman_port", "CompPath", "CompName", "PlatPath", "Platname"])
 	newTerminal(settings.DM_path,'/usr/bin/java -jar DeploymentManager.jar','DM')
 	
 def getToken():
@@ -228,10 +228,10 @@ def relativePath(root, repo_folder,fullPath):
 
 
 
-def generateConfigFile(dir_path,configFileName,listToConfigure):
+def generateConfigFile(toolID,dir_path,configFileName,listToConfigure):
 	dir_path = enforce_trailing_slash(dir_path)
 	try:
-		f_template = open(dir_path + "/configuration-template.txt", "r")
+		f_template = open("templates/" + toolID + "-configuration-template.txt", "r")
 		template = f_template.read()
 	
 	except:

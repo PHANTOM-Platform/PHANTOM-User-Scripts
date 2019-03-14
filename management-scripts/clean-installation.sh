@@ -60,19 +60,19 @@ echo
 echo "############ Cleaning MOM #############"
 
 	cd ${MOM_DIR} &&
-	rm -rf -- !(configuration-template.txt|GA_MOM.jar)
+	rm -rf -- !(GA_MOM.jar)
 
 echo
 echo "############ Cleaning PT #############"
 	
 	cd ${PT_DIR} &&
-	rm -rf -- !(configuration-template.txt|ParallelizationToolset.jar)
+	rm -rf -- !(ParallelizationToolset.jar)
 
 echo
 echo "############ Cleaning DM #############"
 	
 	cd ${DM_DIR} &&
-	rm -rf -- !(configuration-template.txt|DeploymentManager.jar)
+	rm -rf -- !(DeploymentManager.jar)
 
 
 
