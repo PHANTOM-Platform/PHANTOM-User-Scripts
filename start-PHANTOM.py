@@ -11,7 +11,7 @@ token_file = "token.txt"
 parser = argparse.ArgumentParser(description='Tool to support the execution of an application on PHANTOM Framework')
 parser.add_argument('-u', '--noUpload', dest='noUpload', action='store_true' , help='Do not (re)upload the application to the repository. (Application should be already in repository)')
 parser.add_argument('-i', '--skipInputs', dest='noInputs', action='store_true' , help='Do not (re)upload the application inputs to the repository. (Inputs should be already in repository)')
-parser.add_argument('-c', '--clean', dest='clean', action='store_true' , help='Clean all the data in repositories and temporary cache on PHANTOM tools')
+parser.add_argument('-c', '--clean', dest='clean', action='store_true' , help='Clean all the data in repositories and temporary cache on PHANTOM tools. Automatically update PHANTOM_FILES (-p)')
 parser.add_argument('-m', '--ipmarket', dest='ipMarket', action='store_true' , help='Uploads the IP Core Market place to the repository')
 parser.add_argument('-p', '--phantomfiles', dest='phFiles', action='store_true' , help='Uploads the PHANTOM files (PHANTOM API and Monitoring API)')
 
@@ -91,7 +91,7 @@ def main():
 
 	#upload PHANTOM_FILES
 	
-	if args.phFiles and settings.phantom_path != '':
+	if (args.phFiles or args.clean) and settings.phantom_path != '':
 		print("Uploading PHANTOM files")
 
 		uploadPHANTOM_FILES(settings.phantom_path, auth_token,"")
