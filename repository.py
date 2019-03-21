@@ -81,9 +81,9 @@ def uploadFile(filetoupload, token, target_path, repo_project, repo_source):
 	filename = os.path.basename(filetoupload) 
 
 	
-	if not os.path.isfile(filetoupload):
+	if (not os.path.isfile(filetoupload)) or filename.startswith("."):
 		print("{} is not a valid file.".format(filetoupload))
-		sys.exit(1)
+		return
 	else:
 		print("Uploading {} to {}/{}/{}".format(filetoupload,repo_project,repo_source,target_path))
 
