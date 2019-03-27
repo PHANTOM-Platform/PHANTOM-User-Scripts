@@ -5,7 +5,7 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 
 # GLOBAL Variables
 	THIS_DIR=$(pwd)
-	BASE_DIR=${THIS_DIR}/../../
+	BASE_DIR=${THIS_DIR}/../..
 	REPO_DIR=${BASE_DIR}/Repository
 	APPM_DIR=${BASE_DIR}/Application-Manager
 	EXE_DIR=${BASE_DIR}/Execution-Manager
@@ -75,13 +75,13 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 	printf "##################################################\n"
 	cd $USER_DIR  &&
 	git pull
+	
+	printf "\n##################################################\n"
+	printf "##### Updating MF-Server...\n"
+	printf "##################################################\n"	
+	cd ${BASE_DIR}/Monitoring &&
+	svn export --force https://github.com/PHANTOM-Platform/Monitoring/trunk/Monitoring_server Monitoring_server
 
 # Start servers
 	cd ${THIS_DIR} &&
 	bash start-servers.sh
-
-
-
-	
-
-
