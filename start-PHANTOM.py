@@ -10,6 +10,7 @@ token_file = "token.txt"
 
 parser = argparse.ArgumentParser(description='Tool to support the execution of an application on PHANTOM Framework')
 parser.add_argument('-u', '--noUpload', dest='noUpload', action='store_true' , help='Do not (re)upload the application to the repository. (Application should be already in repository)')
+parser.add_argument('-d', '--onlyDesc', dest='descriptionOnly', action='store_true' , help='Only re-uploads the description files to the repository)')
 parser.add_argument('-i', '--skipInputs', dest='noInputs', action='store_true' , help='Do not (re)upload the application inputs to the repository. (Inputs should be already in repository)')
 parser.add_argument('-c', '--clean', dest='clean', action='store_true' , help='Clean all the data in repositories and temporary cache on PHANTOM tools. Automatically update PHANTOM_FILES (-p)')
 parser.add_argument('-m', '--ipmarket', dest='ipMarket', action='store_true' , help='Uploads the IP Core Market place to the repository')
@@ -28,6 +29,8 @@ config_decoder = {
 	"exeman_port" : ["#EXE_PORT#", settings.exe_manager_port],
 	"mon_ip" : ["#MON_IP#", settings.monitoring_ip],
 	"mon_port" : ["#MON_PORT#", settings.monitoring_port],
+	"res_ip" : ["#RES_IP#", settings.resource_ip],
+	"res_port" : ["#RES_PORT#", settings.resource_port],
 	"app_name" : ["#APPNAME#", settings.app_name],
 	"token" : ["#TOKEN#", "No_Token"],
 	"PT_mode" : ["#PT_MODE#",settings.PT_mode],
@@ -75,11 +78,11 @@ def main():
 
 	if not args.noUpload:
 		#upload source code
-		if settings.root_path != '':
+		if settings.root_path != '' and (not args.descriptionOnly):
 			uploadRootFiles(settings.root_path, auth_token)
 			print("Uploading")
 
-		if settings.src_path != '':
+		if settings.src_path != '' and (not args.descriptionOnly):
 			print("Uploading source code...")
 			uploadAllFiles(settings.src_path, auth_token, "src")
 
@@ -119,6 +122,7 @@ def main():
 	generateConfigFile('PT',settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
 
 	newTerminal(settings.PT_path,'/usr/bin/java -jar ParallelizationToolset.jar', 'PT')
+	
 
 	#configure and start IPCore-GEN
 
@@ -128,7 +132,7 @@ def main():
 	
 	#configure and start DM
 
-	generateConfigFile('DM',settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode","exeman_ip", "exeman_port", "CompPath", "CompName", "PlatPath", "Platname"])
+	generateConfigFile('DM',settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode","exeman_ip", "exeman_port", "CompPath", "CompName", "PlatPath", "Platname",  "exeman_ip", "exeman_port","res_ip","res_port"])
 	newTerminal(settings.DM_path,'/usr/bin/java -jar DeploymentManager.jar','DM')
 	
 def getToken():
