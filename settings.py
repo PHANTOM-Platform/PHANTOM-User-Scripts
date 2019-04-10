@@ -43,17 +43,17 @@ password = "9834376081"
 ##################################
 
 # Name of the application
-app_name = "WINGStest3"
+app_name = "WINGSTest3"
 
 ## Paths of folders
 # Root of application (to upload makefile and cla.in)
-root_path = "/home/demo/phantom-tools/Examples/WINGStest3"
+root_path = "/home/demo/Desktop/phantom-tools/Examples/WINGStest3"
 
 # folder with source code
-src_path = "/home/demo/phantom-tools/Examples/WINGStest3/src"
+src_path = "/home/demo/Desktop/phantom-tools/Examples/WINGStest3/src"
 
 # folder with description files
-desc_path = "/home/demo/phantom-tools/Examples/WINGStest3/description"
+desc_path = "/home/demo/Desktop/phantom-tools/Examples/WINGStest3/description"
 
 #folder with PHANTOM API
 phantom_path = "/home/demo/Desktop/phantom-tools/PHANTOM_FILES"
@@ -63,10 +63,12 @@ ipMarket_path = "https://github.com/PHANTOM-Platform/PHANTOM-IP-Core-Marketplace
 ip_folder = "IPCore-MarketPlace"
 
 # folder with inputs
-inputs_path = ""
+inputs_path = "/home/demo/Desktop/phantom-tools/HPC_UC/input"
 
 CompNetPath = "description" 
 CompNetName = "cpn.xml" #Name of the component network file to be used
+#CompNetName = "Component-Network.xml_old"
+
 PlatDesPath = "description"
 PlatDesName = "hw_local.xml"   #Name of the platform description file to be used
 
@@ -90,10 +92,29 @@ PT_mode = "on" #operation mode: on | off - "on" to run PT normally, "off" to ski
 
 ## IPCore-Gen ##
 # IPCore-gen Location
-IP_path= "/home/demo/Desktop/phantom-tools/IP-Core-Generator"
+IP_path= "/Desktop/IP-Core-Generator/"
 
 ## DM ##
 # DM location
 DM_path = "/home/demo/phantom-tools/DeploymentManager"
 DM_mode = "exec" #operation mode: normal | test
+
+## MBT ##
+# Performance estimation
+MBT_pe_path = "/home/demo/phantom-tools/MBT/MBT-Performance-Estimation"
+tested_comp_name = "TestedComponents.xml_old"
+output_est_name = "EstimationResult.xml"
+
+# Test Execution 
+MBT_te_path = "/home/demo/phantom-tools/MBT/MBT-Test-Execution/Test Execution/bin"
+deployment_plan = "Deployment-plan.xml"
+
+
+FPGAVM_ip = "192.168.99.100"
+FPGAVM_port = 2222
+FPGAVM_user = "phantom"
+
+
+
+
 

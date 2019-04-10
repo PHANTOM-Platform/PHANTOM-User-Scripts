@@ -15,13 +15,31 @@ parser.add_argument('-i', '--skipInputs', dest='noInputs', action='store_true' ,
 parser.add_argument('-c', '--clean', dest='clean', action='store_true' , help='Clean all the data in repositories and temporary cache on PHANTOM tools. Automatically update PHANTOM_FILES (-p)')
 parser.add_argument('-m', '--ipmarket', dest='ipMarket', action='store_true' , help='Uploads the IP Core Market place to the repository')
 parser.add_argument('-p', '--phantomfiles', dest='phFiles', action='store_true' , help='Uploads the PHANTOM files (PHANTOM API and Monitoring API)')
+parser.add_argument('--Tpe', dest='MBTpe', action='store_true' , help='Runs only the MBT Performannce estimation tool')
+parser.add_argument('--Tte', dest='MBTte', action='store_true' , help='Runs only the MBT Test Execution tool')
 
+def getIP():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
+def externalizeIP(ip):
+	if ip == "localhost":
+		return getIP()
+	else:
+		return ip
 
 config_decoder = {
 	"user": ["#USER#", settings.user],
 	"pwd" : ["#PWD#", settings.password],
-	"repo_ip" : ["#REPO_IP#", settings.repository_ip],
+	"repo_ip" : ["#REPO_IP#", externalizeIP(settings.repository_ip)],
 	"repo_port" : ["#REPO_PORT#", settings.repository_port],
 	"appman_ip" : ["#APPMAN_IP#",settings.app_manager_ip],
 	"appman_port" : ["#APPMAN_PORT#", settings.app_manager_port],
@@ -38,7 +56,10 @@ config_decoder = {
 	"CompName" : ["#COMPNETNAME#",settings.CompNetName],
 	"PlatPath" : ["#PLATDESPATH#",settings.PlatDesPath],
 	"Platname" : ["#PLATDESNAME#",settings.PlatDesName],
-	"DM_mode" : ["#DM_MODE#",settings.DM_mode]
+	"DM_mode" : ["#DM_MODE#",settings.DM_mode],
+	"dep_plan" : ["#DEP_PLAN#", settings.deployment_plan],
+	"mbt_test_comp" : ["#TEST_COMP#",settings.tested_comp_name],
+	"mbt_output_test" : ["#OUTOUT_TEST#", settings.output_est_name]
 }
 
 
@@ -49,91 +70,106 @@ def main():
 
 	if args.clean:
 		process=subprocess.Popen(['bash','/home/demo/Desktop/phantom-tools/User-tools/management-scripts/clean-installation.sh'],
-                         stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE,cwd="./management-scripts")
+		         stdin=subprocess.PIPE,
+		         stdout=subprocess.PIPE,
+		         stderr=subprocess.PIPE,cwd="./management-scripts")
 		stdoutdata,stderrdata=process.communicate(input=b'y\n')
 		process.wait()
 		print(stdoutdata)
 		print(stderrdata)
-	
+
 	#authentication verification
 	auth_token = getToken()
 	
 	config_decoder["token"]=["#TOKEN#", auth_token]
 
-	if args.ipMarket:
-		#Downloads Ipcores
-		print("Downloading Marketplace...")
-		code = subprocess.call(['git','clone',settings.ipMarket_path,settings.ip_folder])
+	if args.MBTpe: #runs only MBT Performance estimation
+		generateConfigFile('MBTpe',settings.MBT_pe_path, "PerformanceEstimator.py", ["mbt_test_comp","mbt_output_test"])
+
+		newTerminal(settings.MBT_pe_path,'python3 PerformanceEstimator.py ' + settings.CompNetName, 'MBT Perf Est')
+
+
+	elif args.MBTte: #runs only mBT Test Execution
+		generateConfigFile('MBTte',settings.MBT_te_path, "MyExample.cfg", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "res_port", "mon_port", "app_name", "dep_plan", "token"])
+
+		newTerminal(settings.MBT_te_path,'ttcn3_start ./mbttest MyExample.cfg', 'MBT Test Exec')
+
+
+	else: #runs other options
+
+
+		if args.ipMarket:
+			#Downloads Ipcores
+			print("Downloading Marketplace...")
+			code = subprocess.call(['git','clone',settings.ipMarket_path,settings.ip_folder])
 		
-		if code == 0:
-			print("Uploading IP Cores...")
-			uploadMarket(settings.ip_folder, auth_token,"")
-			print("Cleaning local marketplace")
-			code = subprocess.call(['rm','-rf',settings.ip_folder])
-		else:
-			print("Unable to download the IPCore Marketplace")
+			if code == 0:
+				print("Uploading IP Cores...")
+				uploadMarket(settings.ip_folder, auth_token,"")
+				print("Cleaning local marketplace")
+				code = subprocess.call(['rm','-rf',settings.ip_folder])
+			else:
+				print("Unable to download the IPCore Marketplace")
 	
 
-	if not args.noUpload:
-		#upload source code
-		if settings.root_path != '' and (not args.descriptionOnly):
-			uploadRootFiles(settings.root_path, auth_token)
-			print("Uploading")
+		if not args.noUpload:
+			#upload source code
+			if settings.root_path != '' and (not args.descriptionOnly):
+				uploadRootFiles(settings.root_path, auth_token)
+				print("Uploading")
 
-		if settings.src_path != '' and (not args.descriptionOnly):
-			print("Uploading source code...")
-			uploadAllFiles(settings.src_path, auth_token, "src")
+			if settings.src_path != '' and (not args.descriptionOnly):
+				print("Uploading source code...")
+				uploadAllFiles(settings.src_path, auth_token, "src")
 
-		#upload descriptions
+			#upload descriptions
 
-		if settings.desc_path != '':
-			print("Uploading description files...")
-			uploadAllFiles(settings.desc_path, auth_token, "description")
+			if settings.desc_path != '':
+				print("Uploading description files...")
+				uploadAllFiles(settings.desc_path, auth_token, "description")
 
-	#upload PHANTOM_FILES
+		#upload PHANTOM_FILES
 	
-	if (args.phFiles or args.clean) and settings.phantom_path != '':
-		print("Uploading PHANTOM files")
+		if (args.phFiles or args.clean) and settings.phantom_path != '':
+			print("Uploading PHANTOM files")
 
-		uploadPHANTOM_FILES(settings.phantom_path, auth_token,"")
+			uploadPHANTOM_FILES(settings.phantom_path, auth_token,"")
 		
 
-	if not args.noInputs:
-		#upload inputs
-		if settings.inputs_path != '':
-			print("Uploading description files...")
-			uploadAllFiles(settings.inputs_path, auth_token, "inputs")	
+		if not args.noInputs:
+			#upload inputs
+			if settings.inputs_path != '':
+				print("Uploading description files...")
+				uploadAllFiles(settings.inputs_path, auth_token, "inputs")	
 
 	
 
 
-	#register app in application manager
-	repository.websocketUpdateStatus(settings.app_name, "development", "finished", auth_token)
+		#register app in application manager
+		repository.websocketUpdateStatus(settings.app_name, "development", "finished", auth_token)
 
-	#configure and start MOM
-	generateConfigFile('MOM',settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name", "CompName", "Platname"])
+		#configure and start MOM
+		generateConfigFile('MOM',settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name", "CompName", "Platname"])
 
-	newTerminal(settings.MOM_path,'/usr/bin/java -jar GA_MOM.jar --manualData --online', 'MOM')
+		newTerminal(settings.MOM_path,'/usr/bin/java -jar GA_MOM.jar --manualData --online', 'MOM')
 
-	#configure and start PT
+		#configure and start PT
 
-	generateConfigFile('PT',settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
+		generateConfigFile('PT',settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
 
-	newTerminal(settings.PT_path,'/usr/bin/java -jar ParallelizationToolset.jar', 'PT')
+		newTerminal(settings.PT_path,'/usr/bin/java -jar ParallelizationToolset.jar', 'PT')
 	
 
-	#configure and start IPCore-GEN
+		#configure and start IPCore-GEN
 
-#	generateConfigFile("IPGEN",settings.IP_path, "settings.py", ["user", "pwd", "repo_ip", "repo_port", "appman_ip","appman_port", "CompName"])
+	#	generateConfigFile("IPGEN",settings.IP_path, "settings.py", ["user", "pwd", "repo_ip", "repo_port", "appman_ip","appman_port", "CompName"])
 
-#	newTerminal(settings.IP_path,'/usr/bin/python3 ipcore-generator.py subscribe ' + settings.app_name, 'IPCore-Gen')
+	#	newTerminal(settings.IP_path,'/usr/bin/python3 ipcore-generator.py subscribe ' + settings.app_name, 'IPCore-Gen')
 	
-	#configure and start DM
+		#configure and start DM
 
-	generateConfigFile('DM',settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode","exeman_ip", "exeman_port", "CompPath", "CompName", "PlatPath", "Platname",  "exeman_ip", "exeman_port","res_ip","res_port"])
-	newTerminal(settings.DM_path,'/usr/bin/java -jar DeploymentManager.jar','DM')
+		generateConfigFile('DM',settings.DM_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "DM_mode","exeman_ip", "exeman_port", "CompPath", "CompName", "PlatPath", "Platname",  "exeman_ip", "exeman_port","res_ip","res_port"])
+		newTerminal(settings.DM_path,'/usr/bin/java -jar DeploymentManager.jar','DM')
 	
 def getToken():
 	try: #attempts to read token
@@ -234,6 +270,7 @@ def relativePath(root, repo_folder,fullPath):
 
 def generateConfigFile(toolID,dir_path,configFileName,listToConfigure):
 	dir_path = enforce_trailing_slash(dir_path)
+	print("templates/" + toolID + "-configuration-template.txt")
 	try:
 		f_template = open("templates/" + toolID + "-configuration-template.txt", "r")
 		template = f_template.read()
@@ -288,6 +325,13 @@ def enforce_trailing_slash(path):
 		return path + '/'
 	else:
 		return path
+
+def externalizeIP(ip):
+	if ip == "localhost":
+		return getIP()
+	else:
+		return ip
+	
 
 def getIP():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

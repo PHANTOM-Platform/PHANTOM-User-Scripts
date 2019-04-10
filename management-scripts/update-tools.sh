@@ -82,6 +82,12 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 	cd ${BASE_DIR}/Monitoring &&
 	svn export --force https://github.com/PHANTOM-Platform/Monitoring/trunk/Monitoring_server Monitoring_server
 
+	printf "\n##################################################\n"
+	printf "##### Updating MBT tools...\n"
+	printf "##################################################\n"	
+	cd ${BASE_DIR}/MBT-Test-Execution &&
+	git pull
+
 # Start servers
 	cd ${THIS_DIR} &&
 	bash start-servers.sh

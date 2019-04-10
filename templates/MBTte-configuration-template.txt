@@ -1,0 +1,42 @@
+[LOGGING]
+LogFile := "../log/MyExample-%n.log"
+FileMask := LOG_ALL | MATCHING | DEBUG | USER
+ConsoleMask := ERROR | TESTCASE | STATISTICS | USER | DEBUG
+LogSourceInfo := Stack
+
+[EXECUTE]
+MyExample.control
+
+[MODULE_PARAMETERS]
+
+#Server name and port numbers
+MyExample.PAR_SERVER := "#REPO_IP#"
+MyExample.PAR_REPOSITORY_PORT := #REPO_PORT#
+MyExample.PAR_APPLICATION_MANAGER_PORT := #APPMAN_PORT#
+MyExample.PAR_MONITORING_SERVER_PORT := #MON_PORT#
+MyExample.PAR_RESOURCE_MANAGER_PORT := #RES_PORT#
+MyExample.PAR_EXECUTION_MANAGER_PORT := #EXE_PORT#
+
+MyExample.PAR_GRAFANA_PORT := 2783
+
+#Authentication parameters
+MyExample.PAR_USERNAME := "#USER#";
+MyExample.PAR_PASSWORD := "#PWD#";
+
+MyExample.PAR_SECURITY_TOKEN := "#TOKEN#"
+
+# File upload and download parameters
+MyExample.PAR_INPUT_DIR := "/home/elnrnag/MBT/mbttest/ShipDetection/input/"
+MyExample.PAR_DEPLOYMENTPLAN := "#DEP_PLAN#"
+
+MyExample.PAR_PROJECT = "MBT"
+MyExample.PAR_SOURCE = "user"
+MyExample.PAR_INPUT_DIRECTORY_ON_SERVER = "MBT/"
+MyExample.PAR_OUTPUT_DIRECTORY_ON_SERVER = "MBT/"
+MyExample.PAR_OUTPUT_FILENAME = "1_sd_att.xml"
+
+#Parameters for the Execution Manager
+MyExample.PAR_EXEC_MAN_USER := "#USER#"
+MyExample.PAR_EXEC_MAN_APPLICATION := "#APPNAME#"
+MyExample.PAR_EXEC_MAN_CONTENT := "1"
+
