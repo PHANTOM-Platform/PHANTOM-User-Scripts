@@ -4,9 +4,93 @@ Tools designed to aid a User to configure and interact with PHANTOM tools. The p
 
 Before running any tool, <b> the User must update the configurations first </b>. These configurations are stored in the file `settings.py`.
 In this file, the user should validate and update several fields. This file is composed of three main sections:
-- First is a section where the user should update the port and address of the repositories, as well as define the credentials for authentication in the servers
-- The second section corresponds to an area where the user provides some information about the application to be analysed bu PHANTOM tools, where is identified the name of the app and the path where the files are stored
-- In the last  section, can be defined some tool-specific configurations like the path to where each tool is deployed and some arguments required to the correct execution each tool 
+
+1. **Repositories configurations** – used for the USER specify the location of the repositories to be used (localhost or remote location) and credentials. E.g.:
+```python
+   # Set the Repository IP address and port 
+   #repository_ip = "141.58.0.8" 
+   #repository_port = 2777
+    repository_ip = "localhost"
+    repository_port = 8000
+    
+    # Authentication credentials
+    user =
+    password =
+ ```
+ 
+2. **Application configurations** – Used for the USER to indentify application specific properties:
+Name of the application to be used server and by PHANTOM tools to identify the application:
+
+```python
+  app_name = "WINGStest3"
+ ```
+
+Path for the root of the application‟s folder (to upload makefile and cla.in)
+
+```python
+  root_path = "/home/demo/phantom-tools/Examples/WINGStest3"
+```
+
+Path for the folder with the source code
+
+```python
+  src_path = "/home/demo/phantom-tools/Examples/WINGStest3/src"
+```
+
+Path for the folder with description files (Component Network and Platform Description)
+
+```python
+  desc_path = "/home/demo/phantom- tools/Examples/WINGStest3/description"
+```
+Path for thevfolder with PHANTOM API files
+
+```python
+  phantom_path = "/home/demo/Desktop/phantom- tools/PHANTOM_FILES"
+```
+
+Link to the where the marketplace is hosted and name of the folder where IPCores shoul be stored locally
+
+```python
+  ipMarket_path = "https://github.com/PHANTOM-Platform/PHANTOM- IP-Core-Marketplace.git"
+  ip_folder = "IPCore-MarketPlace"
+```
+
+Path for folder with application inputs
+
+```python
+  inputs_path = ""
+```
+
+Name of the component network file to be used
+
+```python
+  CompNetName = "cpn.xml"
+```
+
+Name of the platform description file to be used
+
+```python
+  PlatDesName = "hw_local.xml"
+```
+
+3. **Tools Configurations** – This section contains the parameters for configuring the PHANTOM tools. In includes the path for each tool deployed on the machine. E.g.:
+
+```python
+  # MOM location
+  MOM_path = "/home/demo/phantom-tools/GenericMOM"
+```
+
+And tool specific arguments. E.g.:
+
+```python
+  PT_mode = "on" #operation mode: on | off - "on" to run PT normally, "off" to skip code analysis process
+```
+  In this section can also be found the property for the address of the FPGA VM, as well as the SSH port to be used
+  
+```python
+  FPGAVM_ip = “”
+  FPGAVM_port =
+```
 
 <b> After the configuration of the `settings.py`, the user needs to open a terminal and run the command:</b>
 
@@ -33,6 +117,10 @@ optional arguments:
 
   -p, --phantomfiles  Uploads the PHANTOM files (PHANTOM API and Monitoring
                       API)
+  
+  --Tpe               Runs only the MBT Performance estimation tool
+  
+  --Tte               Runs only the MBT Test Execution tool
 
 
 This command will:
