@@ -3,19 +3,18 @@
 bash update-tools.sh
 
 
-## Start servers using:
+## Start local servers instances using:
 
 bash start-server.sh
 
 
-## Repository database can be cleared using:
-
-bash clean_repo.sh
-
-## The user-specific tools are located in folder "User-tools"
-
-
-###### Stop servers using ####
+## Stop isntances of local servers using 
 
 bash stop-servers.sh
+
+
+## To clean the data on servers and PHANTOM tools temporary files use:
+
+bash clean_installation.sh
+
 
