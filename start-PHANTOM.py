@@ -15,7 +15,7 @@ parser.add_argument('-i', '--skipInputs', dest='noInputs', action='store_true' ,
 parser.add_argument('-c', '--clean', dest='clean', action='store_true' , help='Clean all the data in repositories and temporary cache on PHANTOM tools. Automatically update PHANTOM_FILES (-p)')
 parser.add_argument('-m', '--ipmarket', dest='ipMarket', action='store_true' , help='Uploads the IP Core Market place to the repository')
 parser.add_argument('-p', '--phantomfiles', dest='phFiles', action='store_true' , help='Uploads the PHANTOM files (PHANTOM API and Monitoring API)')
-parser.add_argument('--Tpe', dest='MBTpe', action='store_true' , help='Runs only the MBT Performannce estimation tool')
+parser.add_argument('--Tpe', dest='MBTpe', action='store_true' , help='Runs only the MBT Performance estimation tool')
 parser.add_argument('--Tte', dest='MBTte', action='store_true' , help='Runs only the MBT Test Execution tool')
 
 def getIP():
