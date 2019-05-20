@@ -5,7 +5,7 @@
 	REPO_DIR=${BASE_DIR}/Repository
 	EXE_DIR=${BASE_DIR}/Execution-Manager
 	APP_DIR=${BASE_DIR}/Application-Manager
-	PT_DIR=${BASE_DIR}/ParallelizationToolset
+	PT_DIR=${BASE_DIR}/Parallelisation-Toolset
 	DM_DIR=${BASE_DIR}/DeploymentManager
 	MOM_DIR=${BASE_DIR}/GenericMOM
 	SCRIPT_DIR=$(pwd)/../
@@ -60,13 +60,13 @@ echo
 echo "############ Cleaning MOM #############"
 
 	cd ${MOM_DIR} &&
-	rm -rf -- !(GA_MOM.jar)
+	rm -rf -- !(GA_MOM.jar|LICENSE|README.md)
 
 echo
 echo "############ Cleaning PT #############"
 	
 	cd ${PT_DIR} &&
-	rm -rf -- !(ParallelizationToolset.jar)
+	rm -rf -- !(ParallelisationToolset_lite.jar|README.md)
 
 echo
 echo "############ Cleaning DM #############"

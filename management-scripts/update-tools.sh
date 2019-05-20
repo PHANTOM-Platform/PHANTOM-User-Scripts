@@ -7,12 +7,15 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 	THIS_DIR=$(pwd)
 	BASE_DIR=${THIS_DIR}/../..
 	REPO_DIR=${BASE_DIR}/Repository
+	PT_DIR=${BASE_DIR}/Parallelisation-Toolset
+	MOM_DIR=${BASE_DIR}/GenericMOM
 	APPM_DIR=${BASE_DIR}/Application-Manager
 	EXE_DIR=${BASE_DIR}/Execution-Manager
 	RES_DIR=${BASE_DIR}/Resource-Manager
-	MON_DIR=${BASE_DIR}/Monitoring/Monitoring_server
+	MON_DIR=${BASE_DIR}/Monitoring
 	OffMOM_DIR=${BASE_DIR}/OfflineMOM
 	USER_DIR=${BASE_DIR}/User-tools
+	MBT_DIR=${BASE_DIR}/MBT
 	API_FILE=${BASE_DIR}/PHANTOM_FILES
 	SERVERS_DIR=/home/demo/phantom_servers
 
@@ -75,17 +78,31 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 	printf "##################################################\n"
 	cd $USER_DIR  &&
 	git pull
+
+	printf "\n##################################################\n"
+	printf "##### Updating Parallelisation-Toolset...\n"
+	printf "##################################################\n"
+	cd $PT_DIR &&
+	git pull
+
+	printf "\n##################################################\n"
+	printf "##### Updating Generic_MOM...\n"
+	printf "##################################################\n"
+	cd $MOM_DIR &&
+	git pull
 	
 	printf "\n##################################################\n"
-	printf "##### Updating MF-Server...\n"
+	printf "##### Updating Monitoring...\n"
 	printf "##################################################\n"	
-	cd ${BASE_DIR}/Monitoring &&
-	svn export --force https://github.com/PHANTOM-Platform/Monitoring/trunk/Monitoring_server Monitoring_server
+#	cd ${BASE_DIR}/Monitoring &&
+#	svn export --force https://github.com/PHANTOM-Platform/Monitoring/trunk/Monitoring_server Monitoring_server
+	cd ${MON_DIR} &&
+	git pull
 
 	printf "\n##################################################\n"
 	printf "##### Updating MBT tools...\n"
 	printf "##################################################\n"	
-	cd ${BASE_DIR}/MBT-Test-Execution &&
+	cd ${MBT_DIR}/MBT-Test-Execution &&
 	git pull
 
 # Start servers

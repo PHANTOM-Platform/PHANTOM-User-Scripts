@@ -13,31 +13,31 @@ MON_DIR=${BASE_DIR}/Monitoring/Monitoring_server
 
 # Start servers
 echo "##################################################"	
-echo "##### Stopping Repository... ${REPO_DIR} "
+echo "##### Stopping Repository..."
 echo "##################################################"
 cd $REPO_DIR
 bash stop-repo.sh
 
 echo "##################################################"
-echo "##### Stopping APP Manager... ${APPM_DIR}"
+echo "##### Stopping APP Manager..."
 echo "##################################################"
 cd $APPM_DIR
 bash stop-appmanager.sh
 
 echo "##################################################"
-echo "##### Stopping Execution Manager... ${EXE_DIR}"
+echo "##### Stopping Execution Manager..."
 echo "##################################################"
 cd $EXE_DIR
 bash stop-execmanager.sh
 
 echo "##################################################"
-echo "##### Stopping Resource Manager... ${RES_DIR}"
+echo "##### Stopping Resource Manager..."
 echo "##################################################"
 cd $RES_DIR
 bash stop-resomanager.sh
 
 echo "##################################################"
-echo "##### Stopping Monitoring Server... ${MON_DIR}"
+echo "##### Stopping Monitoring Server..."
 echo "##################################################"
 cd $MON_DIR
 bash stop-monitoring-server.sh
