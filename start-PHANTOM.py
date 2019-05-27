@@ -57,9 +57,9 @@ config_decoder = {
 	"PlatPath" : ["#PLATDESPATH#",settings.PlatDesPath],
 	"Platname" : ["#PLATDESNAME#",settings.PlatDesName],
 	"DM_mode" : ["#DM_MODE#",settings.DM_mode],
-	"dep_plan" : ["#DEP_PLAN#", settings.deployment_plan],
-	"mbt_test_comp" : ["#TEST_COMP#",settings.tested_comp_name],
-	"mbt_output_test" : ["#OUTOUT_TEST#", settings.output_est_name]
+#	"dep_plan" : ["#DEP_PLAN#", settings.deployment_plan],
+#	"mbt_test_comp" : ["#TEST_COMP#",settings.tested_comp_name],
+#	"mbt_output_test" : ["#OUTOUT_TEST#", settings.output_est_name]
 }
 
 
@@ -151,13 +151,13 @@ def main():
 		#configure and start MOM
 		generateConfigFile('MOM',settings.MOM_path, "configuration.xml", ["user", "pwd", "repo_ip", "repo_port", "appman_port", "exeman_port", "app_name", "CompName", "Platname"])
 
-		newTerminal(settings.MOM_path,'/usr/bin/java -jar GA_MOM.jar --manualData --online', 'MOM')
+		newTerminal(settings.MOM_path,'/usr/bin/java -jar GA_MOM.jar --online', 'MOM')
 
 		#configure and start PT
 
 		generateConfigFile('PT',settings.PT_path, "config.properties", ["user", "token", "repo_ip", "repo_port", "appman_ip","appman_port", "mon_ip","mon_port", "app_name", "PT_mode", "CompPath", "CompName", "PlatPath", "Platname", "exeman_ip", "exeman_port"])
 
-		newTerminal(settings.PT_path,'/usr/bin/java -jar ParallelizationToolset.jar', 'PT')
+		newTerminal(settings.PT_path,'/usr/bin/java -jar ParallelisationToolset_lite.jar', 'PT')
 	
 
 		#configure and start IPCore-GEN

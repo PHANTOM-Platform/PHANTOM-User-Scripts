@@ -6,7 +6,7 @@
 	EXE_DIR=${BASE_DIR}/Execution-Manager
 	APP_DIR=${BASE_DIR}/Application-Manager
 	PT_DIR=${BASE_DIR}/Parallelisation-Toolset
-	DM_DIR=${BASE_DIR}/DeploymentManager
+	DM_DIR=${BASE_DIR}/Deployment-Manager
 	MOM_DIR=${BASE_DIR}/GenericMOM
 	SCRIPT_DIR=$(pwd)/../
 	
@@ -72,7 +72,7 @@ echo
 echo "############ Cleaning DM #############"
 	
 	cd ${DM_DIR} &&
-	rm -rf -- !(DeploymentManager.jar)
+	rm -rf -- !(DeploymentManager.jar|README.md)
 
 
 

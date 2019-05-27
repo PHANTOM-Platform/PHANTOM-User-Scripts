@@ -29,11 +29,11 @@ MyExample.PAR_SECURITY_TOKEN := "#TOKEN#"
 MyExample.PAR_INPUT_DIR := "/home/elnrnag/MBT/mbttest/ShipDetection/input/"
 MyExample.PAR_DEPLOYMENTPLAN := "#DEP_PLAN#"
 
-MyExample.PAR_PROJECT = "MBT"
-MyExample.PAR_SOURCE = "user"
-MyExample.PAR_INPUT_DIRECTORY_ON_SERVER = "MBT/"
-MyExample.PAR_OUTPUT_DIRECTORY_ON_SERVER = "MBT/"
-MyExample.PAR_OUTPUT_FILENAME = "1_sd_att.xml"
+MyExample.PAR_PROJECT = "#APPNAME#"
+MyExample.PAR_SOURCE = "development"
+MyExample.PAR_INPUT_DIRECTORY_ON_SERVER = "inputs/"
+MyExample.PAR_OUTPUT_DIRECTORY_ON_SERVER = "outputs/"
+MyExample.PAR_OUTPUT_FILENAME = "img_1block.tiff"
 
 #Parameters for the Execution Manager
 MyExample.PAR_EXEC_MAN_USER := "#USER#"

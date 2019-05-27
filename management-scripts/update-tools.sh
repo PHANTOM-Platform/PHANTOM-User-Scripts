@@ -16,6 +16,7 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 	OffMOM_DIR=${BASE_DIR}/OfflineMOM
 	USER_DIR=${BASE_DIR}/User-tools
 	MBT_DIR=${BASE_DIR}/MBT
+	DM_DIR=${BASE_DIR}/Deployment-Manager
 	API_FILE=${BASE_DIR}/PHANTOM_FILES
 	SERVERS_DIR=/home/demo/phantom_servers
 
@@ -77,6 +78,12 @@ export PATH=/home/demo/phantom_servers/dist/nodejs:/home/demo/phantom_servers/di
 	printf "##### Updating User-tools...\n"
 	printf "##################################################\n"
 	cd $USER_DIR  &&
+	git pull
+
+	printf "\n##################################################\n"
+	printf "##### Updating Deployment Manager...\n"
+	printf "##################################################\n"
+	cd $DM_DIR  &&
 	git pull
 
 	printf "\n##################################################\n"
